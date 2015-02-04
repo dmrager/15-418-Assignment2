@@ -160,14 +160,18 @@ int main(int argc, char** argv)
         // validate results
         for (int i = 0; i < N; i++)
         {
+	  printf("mine: %d, theirs %d \n",checkarray[i],resultarray[i]);
             if(checkarray[i] != resultarray[i])
+	      //printf("mine: %d, Theirs: %d \n",checkarray[i],resultarray[i]);
             {
+	      //printf("mine: %d, Theirs: %d \n",checkarray[i],resultarray[i]);
                 fprintf(stderr,
                         "Error: Device exclusive_scan outputs incorrect result."
                         " A[%d] = %d, expecting %d.\n",
                         i, resultarray[i], checkarray[i]);
                 exit(1);
             }
+	    
         }
         printf("Scan outputs are correct!\n");
     } else if (test.compare("find_repeats") == 0) { // Test find_repeats
