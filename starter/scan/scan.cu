@@ -60,24 +60,26 @@ void exclusive_scan(int* device_start, int length, int* device_result)
      * both the input and the output arrays are sized to accommodate the next
      * power of 2 larger than the input.
      */
+
+  int rounded_length = nextPow2(length);  
   dim3 threadsPerBlock(1024,1,1);
-  dim3 numBlocks(((length+1024-1)/1024),1,1);
+  dim3 numBlocks(((rounded_length+1024-1)/1024),1,1);
   //Upsweep phase
-  for(int twod = 1; twod < length; twod *= 2){
+  for(int twod = 1; twod < rounded_length; twod *= 2){
     int twod1 = twod*2;
     //Kernel call to parallel for the upsweep phase
-    upsweep<<<numBlocks,threadsPerBlock>>>(device_start,device_result,length,twod,twod1);
+    upsweep<<<numBlocks,threadsPerBlock>>>(device_start,device_result,rounded_length,twod,twod1);
     cudaThreadSynchronize();
   }  
 
-  setZero<<<numBlocks,threadsPerBlock>>>(device_result,length);
+  setZero<<<numBlocks,threadsPerBlock>>>(device_result,rounded_length);
 
   //Downsweep phase
-  for(int twod = length/2; twod >= 1; twod /= 2){
+  for(int twod = rounded_length/2; twod >= 1; twod /= 2){
     int twod1 = twod*2;
     //Another parallel kernel call
     //Downswewp call not swapping elements???? *******
-    downsweep<<<numBlocks,threadsPerBlock>>>(device_result,length,twod,twod1);
+    downsweep<<<numBlocks,threadsPerBlock>>>(device_result,rounded_length,twod,twod1);
     cudaThreadSynchronize();
   }
 
@@ -218,13 +220,12 @@ int find_repeats(int *device_input, int length, int *device_output) {
   //temp_out1 has flag data now and WORKS
   int* out1 = (int*)malloc(sizeof(int)*length);
   cudaMemcpy(out1,temp_out1,sizeof(int)*length,cudaMemcpyDeviceToHost);
-  for(int i=0; i<length; i++){
+ for(int i=0; i<length; i++){
     printf("%d ",out1[i]);
   }
   printf("\n");
 
   cudaMemcpy(temp_out2,temp_out1,sizeof(int)*length,cudaMemcpyDeviceToDevice);
-  //cudaScanThrust(temp_out1,temp_out1+length ,temp_out2);
   exclusive_scan(temp_out1,length,temp_out2);
   cudaThreadSynchronize();
 
@@ -244,7 +245,7 @@ int find_repeats(int *device_input, int length, int *device_output) {
   cudaFree(temp_out2);
   cudaFree(temp_out3);
   
-    return 0;
+    return out2[length-1];
 }
 
 /* Timing wrapper around find_repeats. You should not modify this function.
