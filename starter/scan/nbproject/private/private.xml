@@ -8,6 +8,10 @@
         <activeConfIndexElem>0</activeConfIndexElem>
     </data>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/Users/danielleHome/Documents/PCAP/15-418-Assignment2/starter/scan/scan.cu</file>
+            <file>file:/Users/danielleHome/Documents/PCAP/15-418-Assignment2/starter/scan/main.cpp</file>
+            <file>file:/Users/danielleHome/Documents/PCAP/15-418-Assignment2/starter/scan/CycleTimer.h</file>
+        </group>
     </open-files>
 </project-private>
