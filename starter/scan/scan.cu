@@ -218,12 +218,6 @@ int find_repeats(int *device_input, int length, int *device_output) {
 
   flag<<<numBlocks,threadsPerBlock>>>(device_input,temp_out1,length);
   //temp_out1 has flag data now and WORKS
-  int* out1 = (int*)malloc(sizeof(int)*length);
-  cudaMemcpy(out1,temp_out1,sizeof(int)*length,cudaMemcpyDeviceToHost);
- for(int i=0; i<length; i++){
-    printf("%d ",out1[i]);
-  }
-  printf("\n");
 
   cudaMemcpy(temp_out2,temp_out1,sizeof(int)*length,cudaMemcpyDeviceToDevice);
   exclusive_scan(temp_out1,length,temp_out2);
@@ -231,13 +225,8 @@ int find_repeats(int *device_input, int length, int *device_output) {
 
   int* out2 = (int*)malloc(sizeof(int)*length);
   cudaMemcpy(out2,temp_out2,sizeof(int)*length,cudaMemcpyDeviceToHost);
-  printf("below will be scanned result\n");
-  for(int i=0; i<length; i++){
-    printf("%d, ",out2[i]);
-  }
-  printf("\n");
-  
-  multiply<<<numBlocks,threadsPerBlock>>>(temp_out2,temp_out3,length);
+
+  multiply<<<numBlocks,threadsPerBlock>>>(temp_out1,temp_out3,length);
 
   find_repeatIdx<<<numBlocks,threadsPerBlock>>>(temp_out1,temp_out2,temp_out3,device_output,length);
   
@@ -258,11 +247,11 @@ double cudaFindRepeats(int *input, int length, int *output, int *output_length) 
     cudaMalloc((void **)&device_output, rounded_length * sizeof(int));
     cudaMemcpy(device_input, input, length * sizeof(int), 
                cudaMemcpyHostToDevice);
-    printf("below is the input array\n");
-    for(int i=0; i< length; i++){
-      printf("%d ",input[i]);
-    }
-    printf("\n");
+    //printf("below is the input array\n");
+    //for(int i=0; i< length; i++){
+    //  printf("%d ",input[i]);
+    //}
+    //printf("\n");
 
     double startTime = CycleTimer::currentSeconds();
     
