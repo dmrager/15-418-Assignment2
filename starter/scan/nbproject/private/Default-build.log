@@ -1,2 +1,4 @@
-make: Makefile: No such file or directory
-make: *** No rule to make target `Makefile'.  Stop.
+mkdir -p objs/
+g++ -m64 main.cpp -O3 -Wall -c -o objs/main.o
+nvcc -arch=sm_20 scan.cu -O3 -m64 -c -o objs/scan.o
+g++ -m64 -O3 -Wall -o cudaScan objs/main.o  objs/scan.o -L/usr/local/cuda/lib64/ -lcudart

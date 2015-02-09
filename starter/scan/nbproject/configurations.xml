@@ -20,12 +20,13 @@
   <confs>
     <conf name="Default" type="0">
       <toolsSet>
-        <compilerSet>GNU|GNU</compilerSet>
+        <compilerSet>default</compilerSet>
         <dependencyChecking>false</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <flagsDictionary>
-        <element flagsID="0" commonFlags="-xc++ -O3 -m64"/>
+        <element flagsID="0" commonFlags="-m64 -O3"/>
+        <element flagsID="1" commonFlags="-xc++ -O3 -m64"/>
       </flagsDictionary>
       <codeAssistance>
       </codeAssistance>
@@ -37,10 +38,12 @@
           <executablePath></executablePath>
         </makeTool>
       </makefileType>
-      <item path="main.cpp" ex="false" tool="1" flavor2="4">
-      </item>
-      <item path="scan.cu" ex="false" tool="1" flavor2="4">
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
         <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="scan.cu" ex="false" tool="1" flavor2="0">
+        <ccTool flags="1">
           <incDir>
             <pElem>../../../../../Library/Caches/NetBeans/8.0.2/remote-files/ghc44.ghc.andrew.cmu.edu_22_drager/usr/local/cuda-6.5/include</pElem>
           </incDir>
